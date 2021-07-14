@@ -522,15 +522,15 @@ func newResourceController(client kubernetes.Interface, eventHandler handlers.Ha
 				queue.Add(newEvent)
 			}
 		},
-		// UpdateFunc: func(old, new interface{}) {
-		// 	newEvent.key, err = cache.MetaNamespaceKeyFunc(old)
-		// 	newEvent.eventType = "update"
-		// 	newEvent.resourceType = resourceType
-		// 	logrus.WithField("pkg", "kubewatch-"+resourceType).Infof("Processing update to %v: %s", resourceType, newEvent.key)
-		// 	if err == nil {
-		// 		queue.Add(newEvent)
-		// 	}
-		// },
+		UpdateFunc: func(old, new interface{}) {
+			newEvent.key, err = cache.MetaNamespaceKeyFunc(old)
+			newEvent.eventType = "update"
+			newEvent.resourceType = resourceType
+			logrus.WithField("pkg", "kubewatch-"+resourceType).Infof("Processing update to %v: %s", resourceType, newEvent.key)
+			if err == nil {
+				queue.Add(newEvent)
+			}
+		},
 		DeleteFunc: func(obj interface{}) {
 			newEvent.key, err = cache.DeletionHandlingMetaNamespaceKeyFunc(obj)
 			newEvent.eventType = "delete"
@@ -681,7 +681,7 @@ func (c *Controller) processItem(newEvent Event) error {
 			Status:    status,
 			Reason:    "Updated",
 		}
-		c.eventHandler.Handle(kbEvent)
+		// c.eventHandler.Handle(kbEvent)
 		return nil
 	case "delete":
 		kbEvent := event.Event{
