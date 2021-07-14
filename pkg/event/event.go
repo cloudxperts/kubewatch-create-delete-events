@@ -39,8 +39,8 @@ type Event struct {
 
 var m = map[string]string{
 	"created": "Normal",
-	"deleted": "Danger",
-	// "updated": "Warning",
+	"deleted": "Danger"
+	"updated": "Warning",
 }
 
 // New create new KubewatchEvent
