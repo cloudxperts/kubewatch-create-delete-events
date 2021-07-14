@@ -130,9 +130,6 @@ func (ms *MSTeams) Init(c *config.Config) error {
 // Handle handles notification.
 func (ms *MSTeams) Handle(e event.Event) {
 
-	if e.Reason == "Updated"{
-		log.Printf("update message - no need to send notification")
-	} else {
 		card := &TeamsMessageCard{
 			Type:    messageType,
 			Context: context,
@@ -154,7 +151,6 @@ func (ms *MSTeams) Handle(e event.Event) {
 		}
 	
 		log.Printf("Message successfully sent to MS Teams")
-	}
 
 
 }
