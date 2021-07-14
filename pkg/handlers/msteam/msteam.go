@@ -129,25 +129,32 @@ func (ms *MSTeams) Init(c *config.Config) error {
 
 // Handle handles notification.
 func (ms *MSTeams) Handle(e event.Event) {
-	card := &TeamsMessageCard{
-		Type:    messageType,
-		Context: context,
-		Title:   "kubewatch",
-		// Set a default Summary, this is required for Microsoft Teams
-		Summary: "kubewatch notification received",
+
+	if e.Reason == "Updated"{
+		log.Printf("update message - no need to send notification")
+	} else {
+		card := &TeamsMessageCard{
+			Type:    messageType,
+			Context: context,
+			Title:   "kubewatch",
+			// Set a default Summary, this is required for Microsoft Teams
+			Summary: "kubewatch notification received",
+		}
+	
+		card.ThemeColor = msTeamsColors[e.Status]
+	
+		var s TeamsMessageCardSection
+		s.ActivityTitle = e.Message()
+		s.Markdown = true
+		card.Sections = append(card.Sections, s)
+	
+		if _, err := sendCard(ms, card); err != nil {
+			log.Printf("%s\n", err)
+			return
+		}
+	
+		log.Printf("Message successfully sent to MS Teams")
 	}
 
-	card.ThemeColor = msTeamsColors[e.Status]
 
-	var s TeamsMessageCardSection
-	s.ActivityTitle = e.Message()
-	s.Markdown = true
-	card.Sections = append(card.Sections, s)
-
-	if _, err := sendCard(ms, card); err != nil {
-		log.Printf("%s\n", err)
-		return
-	}
-
-	log.Printf("Message successfully sent to MS Teams")
 }

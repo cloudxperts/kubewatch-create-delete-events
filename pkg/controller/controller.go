@@ -681,7 +681,7 @@ func (c *Controller) processItem(newEvent Event) error {
 			Status:    status,
 			Reason:    "Updated",
 		}
-		// c.eventHandler.Handle(kbEvent)
+		c.eventHandler.Handle(kbEvent)
 		return nil
 	case "delete":
 		kbEvent := event.Event{
