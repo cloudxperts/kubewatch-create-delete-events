@@ -39,7 +39,7 @@ type Event struct {
 
 var m = map[string]string{
 	"created": "Normal",
-	"deleted": "Danger"
+	"deleted": "Danger",
 	"updated": "Warning",
 }
 
